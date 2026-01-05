@@ -11,7 +11,7 @@ public class Main {
         System.out.println("Nhap chuoi : ");
         String str = sc.nextLine();
 
-        int[] count = new int[256];
+        int[] count = new int[128];
 
         for(int i =0;i<str.length();i++) {
             char c = str.charAt(i);
