@@ -3,8 +3,8 @@ package com.example.BTL2.server;
 import com.example.BTL2.exception.CourseNotFoundException;
 import com.example.BTL2.exception.InvalidScoreException;
 import com.example.BTL2.exception.StudentNotFoundException;
+import com.example.BTL2.exception.DulicateStudentException;
 import com.example.BTL2.model.*;
-import com.example.bai10.DuplicateCustomerException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -47,7 +47,7 @@ public class StudentManager {
 
     public void addStudent(Student s){
         if(studentRepo.exists(s.getId()))
-            throw new DuplicateCustomerException("Ma ID sinh vien bi trung");
+            throw new DuplicateStudentException("Ma ID sinh vien bi trung");
            studentRepo.add(s.getId(),s);
     }
 
@@ -151,3 +151,4 @@ public class StudentManager {
     }
 
 }
+
