@@ -1,0 +1,6 @@
+com\folder\model\Category.class
+com\folder\repository\ProductRepository.class
+com\folder\controller\ProductController.class
+com\folder\service\ProductService.class
+com\folder\mapper\ProductRowMapper.class
+com\folder\model\Product.class
