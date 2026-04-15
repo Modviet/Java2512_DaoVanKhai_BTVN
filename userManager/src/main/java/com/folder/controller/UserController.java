@@ -17,12 +17,23 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public String list(Model model) {
-        List<User> users = userService.findAll();
-        model.addAttribute("users", users);
+      @GetMapping
+    public String list(@RequestParam(value = "role" ,required = false) String role ,
+                       Model model){
+        List<User> users;
+
+        if(role== null || role.isEmpty()){
+            users = userService.findAll();
+        } else {
+            users = userService.findByRole(role);
+        }
+
+        model.addAttribute("users",users);
+        model.addAttribute("role",role);
+
         return "admin/user_list";
-    }
+     }
+
 
     @GetMapping("/create")
     public String createForm(Model model) {
