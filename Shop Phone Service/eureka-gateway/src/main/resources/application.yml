@@ -1,0 +1,53 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: eureka-gateway
+  # Cấu hình routing cho Gateway
+  cloud:
+    gateway:
+      # Cho phép CORS từ React frontend
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000"
+            allowedMethods: "GET,POST,PUT,DELETE,OPTIONS"
+            allowedHeaders: "*"
+            allowCredentials: true
+      routes:
+        # Route đến User Service (auth + user management)
+        - id: user-service # tên của serice
+          uri: lb://USER-SERVICE # mã service đăng ký trong Eureka registry
+          predicates:
+            - Path=/api/v1/auth/**,/api/users/** # config các prefix url sẽ forward đến các service nào ví dụ: tất cả các url có prerix /api/v1/auth/ hoặc /api/users/ sẽ đều forward request về user service
+
+        # Route đến Product Service
+        - id: product-service
+          uri: lb://PRODUCT-SERVICE
+          predicates:
+            - Path=/api/products/** # tất cả các url có prefix /api/products/ sẽ forward về product service
+
+
+        # Route đến Order Service (cart, orders, reviews)
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/api/orders/**,/api/cart/**,/api/reviews/** # tất cả các url có prefix /api/orders/ hoặc /api/cart/ hoặc /api/reviews/ sẽ forward về order service
+
+# Cấu hình Eureka Client
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:19089/eureka/ # config đăng ký service này với eureka registry ở địa chỉ nào, ở đây là localhost cổng 19089
+
+# JWT Secret Key (phải giống nhau ở tất cả các service)
+jwt:
+  secret: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    com.netflix.eureka: WARN
